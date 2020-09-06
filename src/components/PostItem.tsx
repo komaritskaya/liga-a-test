@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Post, User } from '../types';
+import { Post } from '../types';
 
 interface PostItemProps {
   post: Post;
-  user: User;
   filter: string;
 };
 
@@ -32,12 +31,21 @@ const Filter = styled.span`
   color: black;
 `;
 
-const PostItem: React.FC<PostItemProps> = ({post, user, filter}) => {
+const PostItem: React.FC<PostItemProps> = ({post, filter}) => {
+  const {title, body} = post;
+  const {name, username} = post.user;
+  
+  const renderText = (text: string) => text.toLowerCase().startsWith(filter.toLowerCase()) ? (
+    <React.Fragment>
+      <Filter>{text.slice(0, filter.length)}</Filter>{text.slice(filter.length)} 
+    </React.Fragment>
+  ) : text;
+  
   return (
     <Card>
-      <Heading>{post.title}</Heading>
-      <Subtitle><b>{user.username}</b> | {user.name}</Subtitle>
-      <Text><Filter>{filter}</Filter>{post.body.slice(filter.length)}</Text>
+      <Heading>{renderText(title)}</Heading>
+      <Subtitle><b>{renderText(username)}</b> | {renderText(name)}</Subtitle>
+      <Text>{renderText(body)}</Text>
     </Card>
   );
 };

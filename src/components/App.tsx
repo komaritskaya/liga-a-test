@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 import styled, {createGlobalStyle} from 'styled-components';
 import PostList from './PostList';
 import Search from './Search';
+import { RawPost, Post, User } from '../types';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -21,7 +23,24 @@ const Layout = styled.div`
 `;
 
 const App = () => {
+  const [posts, setPosts] = useState<Post[]>([]);
   const [filter, setFilter] = useState(``);
+  
+  useEffect(() => {
+    const usersRequest = axios.get(process.env.REACT_APP_USERS_URL as string);
+    const postsRequest = axios.get(process.env.REACT_APP_POSTS_URL as string);
+    axios.all([usersRequest, postsRequest])
+      .then(
+        axios.spread((...responses) => {
+          const usersResponse = responses[0].data;
+          const postsResponse = responses[1].data;
+          setPosts(postsResponse.map((post: RawPost) => ({
+            ...post, user: usersResponse.find((user: User) => user.id === post.userId)
+          })));
+        })
+      )
+      .catch(err => console.log(err));
+  }, []);
 
   const handleSearchChange = (value: string) => {
     setFilter(value);
@@ -32,7 +51,7 @@ const App = () => {
       <GlobalStyle />
       <Layout>
         <Search handleSearchChange={handleSearchChange} />
-        <PostList filter={filter} />
+        <PostList filter={filter} posts={posts} />
       </Layout>
     </React.Fragment>
   );

@@ -1,8 +1,12 @@
-export interface Post {
+export interface RawPost {
   body: string;
   id: number;
   userId: number;
   title: string;
+}
+
+export interface Post extends RawPost {
+  user: User;
 }
 
 export interface User {
