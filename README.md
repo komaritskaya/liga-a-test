@@ -1,3 +1,10 @@
+Тестовое задание для ООО Ракета (Лига А) с использованием React+hooks, styled-components, TS.
+
+Одностраничное приложение, выводящее список постов, которые можно отфильтровать по тексту, заголовку, имени и никнейму автора.
+
+***
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
