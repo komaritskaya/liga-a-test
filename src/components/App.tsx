@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import axios from 'axios';
 import styled, {createGlobalStyle} from 'styled-components';
 import PostList from './PostList';
@@ -42,9 +42,7 @@ const App = () => {
       .catch(err => console.log(err));
   }, []);
 
-  const handleSearchChange = (value: string) => {
-    setFilter(value);
-  }
+  const handleSearchChange = useCallback((value: string) => setFilter(value), []);
 
   return (
     <React.Fragment>
